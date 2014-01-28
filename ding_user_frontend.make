@@ -17,9 +17,6 @@ projects[i18n][version] = "1.7"
 projects[panels][subdir] = contrib
 projects[panels][version] = "3.2"
 
-projects[securepages][subdir] = contrib
-projects[securepages][version] = "1.x-dev"
-
 projects[strongarm][subdir] = contrib
 projects[strongarm][version] = "2.0"
 
