@@ -5,6 +5,40 @@
  */
 
 /**
+ * To log out without changing to the frontpage use this link:
+ * javascript: Drupal.ninja_logout();
+ */
+
+function ding_user_frontend_init() {
+  drupal_add_js(drupal_get_path('module', 'ding_user_frontend') . '/js/user.js');
+}
+
+/**
+ * Implements hook_menu()
+ * @return string
+ */
+function ding_user_frontend_menu() {
+  $items['user/ninja_logout'] = array(
+    'title' => 'Logout',
+    'description' => 'Silent logout',
+    'page callback' => 'ding_user_frontend_ninja_logout',
+    'access callback' => TRUE,
+    'type' => MENU_CALLBACK,
+    );
+  return $items;
+}
+
+function ding_user_frontend_ninja_logout() {
+  //copied from user_logout without drupal_goto
+  global $user;
+  watchdog('user', 'Session closed for %name.', array('%name' => $user->name));
+  module_invoke_all('user_logout', $user);
+  // Destroy the current session, and reset $user to the anonymous user.
+  session_destroy();
+  drupal_exit();
+}
+
+/**
  * Implements hook_preprocess_page().
  */
 function ding_user_frontend_preprocess_page(&$variables) {
