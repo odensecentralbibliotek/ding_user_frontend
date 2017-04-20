@@ -152,7 +152,21 @@ function ding_user_frontend_block_view($delta = '') {
 
         $status = array();
         foreach (array('loan', 'reservation', 'debt') as $type) {
-          $status[$type . '_count'] = ding_provider_implements($type, 'list') ? count(ding_provider_invoke_page($type, 'list', $user)) : 0;
+            $value = ding_provider_invoke_page($type, 'list', $user);
+            if($type == 'reservation')
+            {
+                $total_count = 0;
+                foreach($value as $array)
+                {
+                    $total_count += count($array);
+                }
+                $status[$type . '_count'] = ding_provider_implements($type, 'list') ? $total_count : 0;
+            }
+            else
+            {
+                $status[$type . '_count'] = ding_provider_implements($type, 'list') ? count($value) : 0;
+            }
+          
         }
         $status['bookmark_count'] = ding_bookmark_count_number();
         $block['content'] = theme('ding_user_frontend_user_status', $status);
